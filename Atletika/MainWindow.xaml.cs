@@ -21,7 +21,7 @@ namespace Atletika
     /// </summary>
     public partial class MainWindow : Window
     {
-		public ObservableCollection<Versenyzo> Versenyzok = new();
+		public ObservableCollection<Versenyzo> Versenyzok { get; } = new();
 		ICollectionView? nezet;
         public MainWindow()
         {
@@ -193,6 +193,7 @@ namespace Atletika
 			Versenyzok.Clear();
 			foreach (Versenyzo v in uj) Versenyzok.Add(v);
 			FrissitSzamlalo();
+			MessageBox.Show($"Betöltve: {uj.Count} versenyző.", "Betöltés", MessageBoxButton.OK, MessageBoxImage.Information);
 		}
 	}
 }
