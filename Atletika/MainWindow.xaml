@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Atletika"
         mc:Ignorable="d"
-        Title="Atlétikai verseny - Rajtszámok" Height="820" Width="1240" FontFamily="Segoe UI" FontSize="14">
+        Title="Atlétikai verseny - Rajtszámok" Height="820" Width="1440" FontFamily="Segoe UI" FontSize="14">
 	<Grid Background="#F3F6FA" Margin="20">
         <Grid.RowDefinitions>
 			<RowDefinition Height="Auto"/>
@@ -54,9 +54,9 @@
 					<Label Content="90" DockPanel.Dock="Right"/>
 				</DockPanel>
 				<Label Content="Korábbi eredmények"/>
-				<CheckBox x:Name="chkOlimpiai" Content="Olimpiai csúcs" Margin="5,0,0,5"/>
-				<CheckBox x:Name="chkVB" Content="Világbajnoki csúcs" Margin="5,0,0,5" IsChecked="True"/>
-				<CheckBox x:Name="chkEB" Content="Európai csúcs" Margin="5,0,0,5"/>
+				<CheckBox x:Name="chkOR" Content="Olimpiai csúcs (OR)" Margin="5,0,0,5"/>
+				<CheckBox x:Name="chkVR" Content="Világcsúcs (VR)" Margin="5,0,0,5" IsChecked="True"/>
+				<CheckBox x:Name="chkER" Content="Európa-csúcs (ER)" Margin="5,0,0,5"/>
 				<DockPanel>
 					<Label Content="Igényelt rajtszám:" DockPanel.Dock="Left"/>
 					<TextBox x:Name="txtRajtszam" Height="32" DockPanel.Dock="Right"/>
@@ -68,19 +68,57 @@
 
 		<Border Grid.Row="2" Grid.ColumnSpan="2" BorderBrush="#D4DDE7" BorderThickness="1" CornerRadius="8" Padding="16" Margin="0,8,0,0">
 			<DockPanel LastChildFill="False">
-				<TextBlock x:Name="txtSzamlalo" DockPanel.Dock="Left" Text="Regisztrált versenyzők: 0" VerticalAlignment="Center"/>
+				<TextBlock x:Name="txtSzamlalo" DockPanel.Dock="Left" Text="Látható: 0 / Összesen: 0" VerticalAlignment="Center"/>
 				<Button x:Name="btnBetoltes" Height="32" Width="210" Click="Betoltes_Click" DockPanel.Dock="Right" Content="FÁJLBÓL BETÖLTÉS" Margin="8,0,0,0" VerticalAlignment="Center"/>
 				<Button x:Name="btnMentes" Height="32" Width="210" Click="Mentes_Click" DockPanel.Dock="Right" Content="FÁJLBA MENTÉS" Margin="0,0,8,0" VerticalAlignment="Center"/>
 			</DockPanel>
 		</Border>
 
 		<Border Grid.Column="1" Grid.Row="1" BorderBrush="#D4DDE7" BorderThickness="1" CornerRadius="8" Padding="16" Margin="10,8,0,8">
-			<StackPanel>
-				<Label Content="Regisztrált versenyzők"/>
-				<Label Content="Rajtszám | Név | Versenyszám | Nem | Kor | O | VB | EB"/>
-				<DataGrid x:Name="dgVersenyzok" Height="280" Padding="6" BorderBrush="#D4DDE7"/>
-				<Label Content="O = olimpia, VB = világbajnoki, EB = Európa-bajnoki csúcs"/>
-			</StackPanel>
+			<Grid>
+				<Grid.RowDefinitions>
+					<RowDefinition Height="Auto"/>
+					<RowDefinition Height="Auto"/>
+					<RowDefinition Height="*"/>
+					<RowDefinition Height="Auto"/>
+				</Grid.RowDefinitions>
+				<Label Content="Regisztrált versenyzők" FontWeight="Bold" FontSize="16"/>
+				<DockPanel Grid.Row="1" Margin="0,4,0,8">
+					<Label Content="Eredményszűrő:" VerticalAlignment="Center"/>
+					<ComboBox x:Name="cmbRekordSzuro" Width="220" HorizontalAlignment="Left" SelectedIndex="0" IsEditable="False" SelectionChanged="Szuro_Valtozott">
+						<ComboBoxItem Content="Összes"/>
+						<ComboBoxItem Content="OR - olimpiai csúcs"/>
+						<ComboBoxItem Content="VR - világcsúcs"/>
+						<ComboBoxItem Content="ER - Európa-csúcs"/>
+					</ComboBox>
+				</DockPanel>
+				<DataGrid x:Name="dgVersenyzok" Grid.Row="2" ItemsSource="{Binding Versenyzok, Mode=OneWay}"
+						  AutoGenerateColumns="False" IsReadOnly="True" CanUserAddRows="False" CanUserDeleteRows="False"
+						  HeadersVisibility="Column" SelectionUnit="FullRow" SelectionMode="Single" CanUserReorderColumns="False"
+						  RowHeight="32" AlternationCount="2" AlternatingRowBackground="#F4F7FB" GridLinesVisibility="Horizontal"
+						  BorderBrush="#D4DDE7">
+					<DataGrid.ColumnHeaderStyle>
+						<Style TargetType="DataGridColumnHeader">
+							<Setter Property="Background" Value="#19324D"/>
+							<Setter Property="Foreground" Value="White"/>
+							<Setter Property="FontWeight" Value="Bold"/>
+							<Setter Property="HorizontalContentAlignment" Value="Center"/>
+							<Setter Property="Height" Value="38"/>
+						</Style>
+					</DataGrid.ColumnHeaderStyle>
+					<DataGrid.Columns>
+						<DataGridTextColumn Header="Rajtszám" Binding="{Binding Rajtszam, Mode=OneWay}" Width="88"/>
+						<DataGridTextColumn Header="Név" Binding="{Binding Nev, Mode=OneWay}" Width="*"/>
+						<DataGridTextColumn Header="Versenyszám" Binding="{Binding Versenyszam, Mode=OneWay}" Width="160"/>
+						<DataGridTextColumn Header="Nem" Binding="{Binding Nem, Mode=OneWay}" Width="70"/>
+						<DataGridTextColumn Header="Életkor" Binding="{Binding Eletkor, Mode=OneWay}" Width="80"/>
+						<DataGridCheckBoxColumn Header="OR" Binding="{Binding OR, Mode=OneWay}" Width="80"/>
+						<DataGridCheckBoxColumn Header="VR" Binding="{Binding VR, Mode=OneWay}" Width="80"/>
+						<DataGridCheckBoxColumn Header="ER" Binding="{Binding ER, Mode=OneWay}" Width="80"/>
+					</DataGrid.Columns>
+				</DataGrid>
+				<Label Grid.Row="3" Content="OR = olimpiai csúcs   VR = világcsúcs   ER = Európa-csúcs" FontSize="11"/>
+			</Grid>
 		</Border>
     </Grid>
 </Window>
